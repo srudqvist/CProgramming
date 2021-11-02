@@ -27,7 +27,7 @@ Functions:
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "stack.c"
+#include "stack_all.cpp"
 
 
 // prints the given stack in order of insertion.
@@ -36,54 +36,51 @@ Functions:
 // TODO: implement this function
 void printStack(STACK stk)
 {
-
+    printf(stk);
 }
 
-void hanoi(int size, STACK first, STACK second, STACK third)
+void hanoi(int size, STACK* first, STACK* second, STACK* third)
 {
     if(size>0)
     {
         hanoi(size-1, first, third, second);
-        int current = pop(first);
+        int current = first->pop();
 // TODO: leave a commment explaining what the following preprocessor directive does
-#ifdef _DEBUG
-    printStack(first);
-    printStack(second);
-    printStack(third);
-    printf("size is %d\n\n", size);
 
-#endif
-        push(second,current);
+        second->push(current);
         hanoi(size-1, third, second, first);
-
     }
 
 }
 
 int main () {
     // Create stacks and populate first one
-    STACK stackA, stackB, stackC;
+    Stack* stackA;
+    Stack* stackB;
+    Stack* stackC;
+
     printf("Initializing stacks\n");
-    stackA = initialize_stack();
-    stackB = initialize_stack();
-    stackC = initialize_stack();
+    stackA = new Stack();
+    stackB = new Stack();
+    stackC = new Stack();
     int size = 4;
 
     // fill the stack
     for (int i = size; i > 0 && !isFull(stackA); i--)
     {
         printf ("Pushing %d\n", i);
-        push(stackA,i);
+        stackA->push(i);
     }
-    printStack(stackA);
-    printStack(stackB);
-    printStack(stackC);
+    stackA->print();
+    stackB->print();
+    stackC->print();
+
 
     hanoi(size, stackA, stackB, stackC);
 
-    printStack(stackA);
-    printStack(stackB);
-    printStack(stackC);
+    stackA->print();
+    stackB->print();
+    stackC->print();
 
     return 0;
 }
